@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function HomePage() {
+export default function OrderPage() {
   return (
     <>
-      <p>Homepage</p>
+      <p>Order</p>
     </>
   );
 }
