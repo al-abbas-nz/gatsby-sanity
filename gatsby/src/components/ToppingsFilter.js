@@ -19,7 +19,7 @@ const ToppingsStyles = styled.div`
       background: white;
       padding: 2px 5px;
     }
-    .active {
+    &[aria-current='page'] {
       background: var(--yellow);
     }
   }
@@ -56,7 +56,7 @@ function countPizzasInToppings(pizzas) {
   // eslint-disable-next-line no-unreachable
 }
 
-export default function ToppingsFilter() {
+export default function ToppingsFilter({ activeTopping }) {
   // get a list of all the toppings
   const { toppings, pizzas } = useStaticQuery(graphql`
     query {
@@ -86,8 +86,16 @@ export default function ToppingsFilter() {
   // link it up
   return (
     <ToppingsStyles>
+      <Link to="/pizzas/">
+        <span className="name">All</span>
+        <span className="count">{pizzas.nodes.length}</span>
+      </Link>
       {toppingsWithCounts.map((topping) => (
-        <Link to={`/topping/${topping.name}`} key={topping.id}>
+        <Link
+          to={`/topping/${topping.name}`}
+          key={topping.id}
+          className={topping.name === activeTopping ? 'active' : ''}
+        >
           <span className="name">{topping.name}</span>
           <span className="count">{topping.count}</span>
         </Link>
