@@ -67,7 +67,6 @@ async function fetchBeersAndTurnIntoNodes({
   // 1. fetch a list of beers
   const res = await fetch('https://api.sampleapis.com/beers/ale');
   const beers = await res.json();
-  console.log(beers);
   // 2. loop over each one
   for (const beer of beers) {
     const nodeMeta = {
@@ -88,6 +87,47 @@ async function fetchBeersAndTurnIntoNodes({
   // 3. create a node for that beer
 }
 
+async function turnSlicemastersIntoPages({ graphql, actions }) {
+  // 1. query all slicemasters
+  const { data } = await graphql(`
+    query {
+      slicemasters: allSanityPerson {
+        totalCount
+        nodes {
+          name
+          id
+          slug {
+            current
+          }
+        }
+      }
+    }
+  `);
+  // 2. TODO turn each slicemaster into their own page
+  // 3. figure out how many pages there are based on how many slicemaasters there are, and how many per page! (E.G. 10 SLICE MASTERS, 2 PER PAGE => MAKE 5 PAGES!)
+  const pageSize = parseInt(process.env.GATSBY_PAGE_SIZE);
+  const pageCount = Math.ceil(data.slicemasters.totalCount / pageSize);
+  console.log(
+    `there are ${data.slicemasters.totalCount} total people and we have ${pageCount} pages with ${pageSize} per page`
+  );
+  // 4. loop from 1 to n and create the pages for them
+  Array.from({ length: pageCount }).forEach((_, i) => {
+    console.log(`creating page ${i}`);
+    actions.createPage({
+      path: `/slicemasters/${i + 1}`,
+      component: path.resolve('./src/pages/slicemasters.js'),
+
+      // this data is passed to the template when we create it
+      context: {
+        skip: i * pageSize,
+        currentPage: i + 1,
+        pageSize,
+      },
+    });
+  });
+  //
+}
+
 export async function sourceNodes(params) {
   // fetch a list of beers and source them into our gatsby api
   await Promise.all([fetchBeersAndTurnIntoNodes(params)]);
@@ -102,6 +142,8 @@ export async function createPages(params) {
 
     // 2. toppings
     turnToppingsIntoPages(params),
+
+    // 3. slicemasters
+    turnSlicemastersIntoPages(params),
   ]);
-  // 3. slicemasters
 }
