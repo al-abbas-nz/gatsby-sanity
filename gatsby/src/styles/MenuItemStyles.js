@@ -15,7 +15,6 @@ const MenuItemStyles = styled.div`
   p {
     margin: 0;
   }
-
   button {
     font-size: 1.5rem;
   }
