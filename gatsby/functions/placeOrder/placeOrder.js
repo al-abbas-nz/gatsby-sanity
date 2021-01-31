@@ -5,18 +5,19 @@ function generateOrderEmail({ order, total }) {
   <h2>Your Recent Order for ${total}</h2>
   <p>Please starting walking over, we will have your order ready in the next 20 mins.</p>
   <ul>
-  ${order.map(
-    (item) => `<li>
+  ${order
+    .map(
+      (item) => `<li>
   <img src="${item.thumbnail}" alt="${item.name}"/>
   ${item.size} ${item.name} - ${item.price}
   </li>`
-  )}
+    )
+    .join('')}
   </ul>
   <p>Your total is ${total} due at pickup.</p>
   <style>
     ul {
       list-style: none;
-
     }
   </style>
   </div>`;
@@ -31,11 +32,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// function wait(ms = 0) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(resolve, ms);
+//   });
+// }
+
 exports.handler = async (event, context) => {
   const body = JSON.parse(event.body);
   console.log(body);
   // validate the data coming in is correct
   const requiredFields = ['email', 'name', 'order'];
+
   for (const field of requiredFields) {
     console.log(`checking that ${field} is good`);
     if (!body[field]) {
@@ -47,10 +55,19 @@ exports.handler = async (event, context) => {
       };
     }
   }
+
+  // make sure they actually have items in that order
+  if (!body.order.length) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: `Why would you order nothing?!`,
+      }),
+    };
+  }
+
   // send the email
-
   // send the success or error message
-
   // test send an email
   const info = await transporter.sendMail({
     from: "Slick's slices <slick@example.com>",
