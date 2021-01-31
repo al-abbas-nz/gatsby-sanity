@@ -16,6 +16,7 @@ export default function OrderPage({ data }) {
   const { values, updateValue } = useForm({
     name: '',
     email: '',
+    mapleSyrup: '',
   });
 
   const {
@@ -56,6 +57,14 @@ export default function OrderPage({ data }) {
               type="email"
               name="email"
               value={values.email}
+              onChange={updateValue}
+            />
+            <input
+              className="mapleSyrup"
+              id="mapleSyrup"
+              type="mapleSyrup"
+              name="mapleSyrup"
+              value={values.mapleSyrup}
               onChange={updateValue}
             />
           </label>
