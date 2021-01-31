@@ -63,7 +63,7 @@ export default function usePizza({ pizzas, values }) {
     } else {
       // it worked!
       setLoading(false);
-      setMessage('Success! Come on down from your pziza');
+      setMessage('Success! Come on down for your pziza');
     }
   }
 
