@@ -24,6 +24,11 @@ const PizzaStyles = styled.div`
   p {
     margin: 0;
   }
+  @media screen and (max-width: 400px) {
+    .pizza-image {
+      width: 75%;
+    }
+  }
 `;
 
 function SinglePizza({ pizza }) {
@@ -35,7 +40,11 @@ function SinglePizza({ pizza }) {
         </h2>
       </Link>
       <p>{pizza.toppings.map((topping) => topping.name).join(', ')}</p>
-      <Img fluid={pizza.image.asset.fluid} alt={pizza.name} />
+      <Img
+        className="pizza-image"
+        fluid={pizza.image.asset.fluid}
+        alt={pizza.name}
+      />
     </PizzaStyles>
   );
 }
