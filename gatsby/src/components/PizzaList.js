@@ -25,6 +25,12 @@ const PizzaStyles = styled.div`
     margin: 0;
   }
   @media screen and (max-width: 400px) {
+    p {
+      font-size: 1.3rem;
+    }
+    h2 {
+      font-size: 2.5rem;
+    }
     .pizza-image {
       width: 75%;
     }
